@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for user in data.users %}
+    {{ user.first_name }}
+    <br />
+{% endfor %}
+
+{% endblock %}
