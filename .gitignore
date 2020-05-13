@@ -133,4 +133,4 @@ dmypy.json
 .env.prod
 .env.prod.db
 /services/pg_data/
-/.idea/
+/.idea
