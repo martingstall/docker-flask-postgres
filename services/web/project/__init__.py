@@ -16,11 +16,15 @@ from flask import (
 from project.models.shared import db
 from project.models.users import User
 
+from project.blueprints import auth
+
 app = Flask(__name__)
 app.config.from_object("project.config.Config")
 db.init_app(app)
 #db = SQLAlchemy(app)
 #migrate = Migrate(app, db)
+
+app.register_blueprint(auth.bp)
 
 
 @app.route("/")
