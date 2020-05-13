@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#Project
+.env.dev
+.env.prod
+.env.prod.db
+/services/pg_data/
