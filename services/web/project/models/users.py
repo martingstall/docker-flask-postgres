@@ -1,5 +1,6 @@
 from project.models.shared import db
 
+
 class User(db.Model):
     __tablename__ = "users"
 

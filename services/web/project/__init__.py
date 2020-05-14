@@ -17,6 +17,7 @@ from project.models.shared import db
 from project.models.users import User
 
 from project.blueprints import auth
+from project.blueprints import user
 
 app = Flask(__name__)
 app.config.from_object("project.config.Config")
@@ -25,19 +26,12 @@ db.init_app(app)
 #migrate = Migrate(app, db)
 
 app.register_blueprint(auth.bp)
+app.register_blueprint(user.bp)
 
 
 @app.route("/")
 def hello_world():
-    return jsonify(hello="world")
-
-
-@app.route("/users/")
-def users():
-    data = {
-        "users": db.session.query(User)
-    }
-    return render_template("users.html", data=data)
+    return jsonify(hello="world 2")
 
 
 @app.route("/static/<path:filename>")

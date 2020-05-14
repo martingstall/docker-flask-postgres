@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" action="/user/create/">
+    {{ data.form.csrf_token }}
+    {{ data.form.email.label }} {{ data.form.email(size=20) }}
+    {{ data.form.first_name.label }} {{ data.form.first_name(size=20) }}
+    <input type="submit" value="Go">
+</form>
+{% for error in data.form_errors %}
+    <p>{{ error }}</p>
+{% endfor %}
+{% endblock %}
