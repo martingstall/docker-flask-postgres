@@ -53,7 +53,7 @@ def create_user():
 
 @bp.route('/<int:user_id>/edit/', methods=('GET', 'POST'))
 def edit_user(user_id):
-    print ("ID: ", user_id)
+    print ("user_id: ", user_id)
     pass
     #user = db.session.query(User).filter(User.id == id)
 
