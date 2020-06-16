@@ -1,16 +1,14 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from flask.cli import FlaskGroup
 
 from project import app
-from project.models.shared import db
+from project.database import Session, engine
+
 from project.models.users import User
-from project.models.campaign import Campaign, Phase
 
 cli = FlaskGroup(app)
-
+db = Session()
 migrate = Migrate(app, db)
 
 manager = Manager(app)
@@ -24,8 +22,9 @@ manager.add_command('db', MigrateCommand)
 @cli.command("create_db")
 def create_db():
     #db.drop_all()
-    db.create_all()
-    db.session.commit()
+    #db.create_all()
+    #db.session.commit()
+    pass
 
 
 @cli.command("seed_db")

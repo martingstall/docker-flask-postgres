@@ -1,5 +1,5 @@
 Flask
-Flask-SQLAlchemy
+# Flask-SQLAlchemy
 Flask-Migrate
 Flask-WTF
 gunicorn
@@ -8,3 +8,4 @@ WTForms-SQLAlchemy
 flask-jwt-extended
 flask-restful
 Flask-Script
+marshmallow

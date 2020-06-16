@@ -10,7 +10,6 @@ from flask import (
 )
 from wtforms_sqlalchemy.orm import model_form
 
-from project.models.shared import db
 from project.models.users import User
 
 from project.forms.users import MyFlaskForm
