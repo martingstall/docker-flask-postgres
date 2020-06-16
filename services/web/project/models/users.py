@@ -1,7 +1,13 @@
+from dataclasses import dataclass
 from project.models.shared import db
 
 
+@dataclass
 class User(db.Model):
+    id: int
+    email: str
+    first_name: str
+    active: bool
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -11,3 +17,12 @@ class User(db.Model):
 
     def __str__(self):
         return "%s" % self.email
+
+    @property
+    def serialized(self):
+        """
+
+        :return:
+        :rtype:
+        """
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

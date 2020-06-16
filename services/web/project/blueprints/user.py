@@ -60,6 +60,14 @@ def edit_user(user_id):
 
 @bp.route('/list/', methods=('GET', 'POST'))
 def list_users():
+    user = User()
+
+    x = User.query.all()
+    print ("")
+    print ("")
+    print (x)
+    print ("")
+    print ("")
     data = {
         "users": db.session.query(User)
     }

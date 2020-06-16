@@ -5,3 +5,6 @@ Flask-WTF
 gunicorn
 psycopg2-binary
 WTForms-SQLAlchemy
+flask-jwt-extended
+flask-restful
+Flask-Script
