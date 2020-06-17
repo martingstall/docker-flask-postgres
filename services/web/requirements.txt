@@ -1,7 +1,12 @@
+pyyaml
 Flask
+Flask-WTF
 gunicorn
 psycopg2-binary
+SQLAlchemy
 flask-jwt-extended
 flask-restful
 Flask-Script
 marshmallow
+apispec
+apispec-webframeworks
