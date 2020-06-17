@@ -15,9 +15,9 @@ db = Session()
 
 class FrameworkTemplateEndpoint(Resource):
 
-    def get(self, framework_template_id, **kwargs):
+    def get(self, framework_template_id):
         args = request.args
-        framework_template = db.query(FrameworkTemplate).get(framework_template_id)
+        data = db.query(FrameworkTemplate).get(framework_template_id)
         only_fields = helpers.get_only_fields(args)
 
         if only_fields:
@@ -25,15 +25,23 @@ class FrameworkTemplateEndpoint(Resource):
         else:
             schema = FrameworkTemplateSchema()
 
-        return schema.dump(framework_template)
+        return schema.dump(data)
 
     def put(self, framework_template_id):
         payload = request.get_json()
-        framework_template = db.query(FrameworkTemplate).get(framework_template_id)
-        framework_template.name = payload.get('framework_template_name')
+
+        try:
+            schema = FrameworkTemplateSchema()
+            data = schema.load(payload, partial=True)
+        except ValidationError as err:
+            return jsonify(err.messages)
+
+        db.query(FrameworkTemplate).filter_by(
+            id=framework_template_id
+        ).update(schema.dump(data))
         db.commit()
 
-        return jsonify({"framework_template_id": framework_template_id})
+        return make_response(jsonify(success=True), 200)
 
     def post(self):
         payload = request.get_json()

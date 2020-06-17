@@ -1,7 +1,8 @@
-from pprint import pprint
+from marshmallow import ValidationError
 
 from flask import (
     jsonify,
+    make_response
 )
 from flask_restful import Resource, request, fields, marshal_with
 
@@ -15,7 +16,7 @@ db = Session()
 
 class PhaseEndpoint(Resource):
 
-    def get(self, phase_id, **kwargs):
+    def get(self, phase_id):
         args = request.args
         phase = db.query(Phase).get(phase_id)
         only_fields = helpers.get_only_fields(args)
@@ -62,11 +63,14 @@ class PhasesEndpoint(Resource):
 
     def post(self):
         payload = request.get_json()
-        for row in payload:
-            print("")
-            print("")
-            print("ROW: ", row)
-            print("")
-            print("")
 
-        return jsonify({})
+        try:
+            schema = PhaseSchema()
+            phases = schema.load(payload, many=True)
+        except ValidationError as err:
+            return jsonify(err.messages)
+
+        db.add_all(phases)
+        db.commit()
+
+        return make_response(jsonify(success=True), 200)

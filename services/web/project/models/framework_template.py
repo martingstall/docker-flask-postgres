@@ -20,6 +20,7 @@ class StepSchema(Schema):
 
 class PhaseSchema(Schema):
     id = fields.Int()
+    framework_template_id = fields.Int(required=True)
     name = fields.Str(required=True)
     steps = fields.List(fields.Nested(StepSchema))
 
