@@ -12,20 +12,34 @@ from flask import (
 )
 from flask_restful import Resource, Api
 
-from project.resources.framework_template import FrameworkTemplate, FrameworkTemplateList
+from project.resources.framework_template import FrameworkTemplateEndpoint, FrameworkTemplatesEndpoint
+from project.resources.phase import PhaseEndpoint, PhasesEndpoint
 
 app = Flask(__name__)
 app.config.from_object("project.config.Config")
 api = Api(app)
 
 api.add_resource(
-    FrameworkTemplate,
+    FrameworkTemplateEndpoint,
+    '/frameworktemplate',
     '/frameworktemplate/<int:framework_template_id>',
 )
 
 api.add_resource(
-    FrameworkTemplateList,
-    '/frameworktemplate/list',
+    FrameworkTemplatesEndpoint,
+    '/frameworktemplates',
+)
+
+api.add_resource(
+    PhaseEndpoint,
+    '/phase',
+    '/phase/<int:phase_id>',
+)
+
+api.add_resource(
+    PhasesEndpoint,
+    '/phases',
+    '/phases/<int:framework_template_id>',
 )
 
 

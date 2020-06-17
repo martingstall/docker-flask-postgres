@@ -1,46 +1,65 @@
-from pprint import pprint
+from marshmallow import ValidationError
 
 from flask import (
     jsonify,
+    make_response
 )
-from flask_restful import Resource, request
+from flask_restful import Resource, request, fields, marshal_with
 
 from project.database import Session
-from project.models.campaign import Campaign, CampaignSchema, Phase, Step
-
+from project.models.framework_template import FrameworkTemplate, FrameworkTemplateSchema
 from project.resources import helpers
 
 db = Session()
 
 
-class FrameworkTemplate(Resource):
+class FrameworkTemplateEndpoint(Resource):
 
-    def get(self, framework_template_id):
+    def get(self, framework_template_id, **kwargs):
         args = request.args
-        obj = db.query(Campaign).get(framework_template_id)
+        framework_template = db.query(FrameworkTemplate).get(framework_template_id)
         only_fields = helpers.get_only_fields(args)
 
         if only_fields:
-            schema = CampaignSchema(only=(only_fields))
+            schema = FrameworkTemplateSchema(only=(only_fields))
         else:
-            schema = CampaignSchema()
+            schema = FrameworkTemplateSchema()
 
-        return schema.dump(obj)
+        return schema.dump(framework_template)
 
     def put(self, framework_template_id):
-        return jsonify({"put": framework_template_id})
+        payload = request.get_json()
+        framework_template = db.query(FrameworkTemplate).get(framework_template_id)
+        framework_template.name = payload.get('framework_template_name')
+        db.commit()
+
+        return jsonify({"framework_template_id": framework_template_id})
+
+    def post(self):
+        payload = request.get_json()
+
+        try:
+            schema = FrameworkTemplateSchema()
+            framework_template = schema.load(payload)
+        except ValidationError as err:
+            return jsonify(err.messages)
+
+        db.add(framework_template)
+        db.commit()
+
+        return make_response(jsonify(success=True), 200)
 
 
-class FrameworkTemplateList(Resource):
+class FrameworkTemplatesEndpoint(Resource):
 
     def get(self):
         args = request.args
-        objs = db.query(Campaign).all()
+        framework_templates = db.query(FrameworkTemplate).all()
         only_fields = helpers.get_only_fields(args)
 
         if only_fields:
-            schema = CampaignSchema(many=True, only=(only_fields))
+            schema = FrameworkTemplateSchema(many=True, only=(only_fields))
         else:
-            schema = CampaignSchema(many=True)
+            schema = FrameworkTemplateSchema(many=True)
 
-        return schema.dump(objs)
+        return schema.dump(framework_templates)
