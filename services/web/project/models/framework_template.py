@@ -9,24 +9,55 @@ from sqlalchemy.orm import relationship
 from project.database import Base
 
 
+class StepParams(Schema):
+    phase_id = fields.Int(required=True)
+    name = fields.Str(required=True)
+    description = fields.Str()
+    display_order = fields.Int(required=True)
+    data_entry_form = fields.Str()
+    #css_position = fields.Str()
+
+
 class StepSchema(Schema):
     id = fields.Int()
+    phase_id = fields.Int(required=True)
     name = fields.Str(required=True)
+    display_order = fields.Int(required=True)
+    description = fields.Str()
+    data_entry_form = fields.Str()
 
     @post_load
-    def make_framework_template(self, data, **kwargs):
+    def make_object(self, data, **kwargs):
         return Step(**data)
+
+
+class PhaseParams(Schema):
+    framework_template_id = fields.Int(required=True)
+    name = fields.Str(required=True)
+    display_order = fields.Int(required=True)
+    description = fields.Str()
+    css_position = fields.Str()
 
 
 class PhaseSchema(Schema):
     id = fields.Int()
     framework_template_id = fields.Int(required=True)
     name = fields.Str(required=True)
+    display_order = fields.Int(required=True)
+    description = fields.Str()
+    css_position = fields.Str()
     steps = fields.List(fields.Nested(StepSchema))
 
     @post_load
-    def make_framework_template(self, data, **kwargs):
+    def make_object(self, data, **kwargs):
         return Phase(**data)
+
+
+class FrameworkTemplateParams(Schema):
+    name = fields.Str(required=True)
+    description = fields.Str(required=True)
+    diagram = fields.Str(required=True)
+    active = fields.Bool()
 
 
 class FrameworkTemplateSchema(Schema):
@@ -38,7 +69,7 @@ class FrameworkTemplateSchema(Schema):
     phases = fields.List(fields.Nested(PhaseSchema))
 
     @post_load
-    def make_framework_template(self, data, **kwargs):
+    def make_object(self, data, **kwargs):
         return FrameworkTemplate(**data)
 
 
@@ -56,6 +87,7 @@ class Step(Base):
     description = Column(Text)
     display_order = Column(SmallInteger)
     data_entry_form = Column(JSON)
+    #css_position = Column(String(128), nullable=True)
 
     phases = relationship("Phase", back_populates="steps")
 

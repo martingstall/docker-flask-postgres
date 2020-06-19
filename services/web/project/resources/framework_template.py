@@ -38,7 +38,7 @@ class FrameworkTemplateEndpoint(Resource):
 
         db.query(FrameworkTemplate).filter_by(
             id=framework_template_id
-        ).update(schema.dump(data))
+        ).update(payload)
         db.commit()
 
         return make_response(jsonify(success=True), 200)
